@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+ </head>
+ <body>
+  
+ </body>
+</html>
+
+<script>
+// 첫째 줄에 N과 K가 빈 칸을 사이에 두고 순서대로 주어진다. (1 ≤ K ≤ N ≤ 5,000)
+
+// 요세푸스 배열할당
+var yosepusArray = [] // 요세부스 배열
+var givenArray = [] // 주어진 배열
+var start = -1 // 기본 순번 카운트
+var next = 0 // 유효 순번 카운트
+
+function initArray(N) {
+    for (let i = 1;i <= N;i++) {
+        givenArray.push(i)
+    }
+}
+
+function runYosepus(K) {
+    const len = givenArray.length
+    while (yosepusArray.length < len) {
+        start++
+        const _index = start % len // 다음번 인덱스
+    	const item = givenArray[_index]
+
+    	if (yosepusArray.indexOf(item) == -1) { // 요세푸스 배열에 없는 요소라면
+            next++
+            if (next % K == 0) { // K번째 항목이면
+                // console.log (start,next, _index, givenArray[_index])
+               yosepusArray.push(givenArray[_index]) // 요세푸스 담기
+    	    }
+    	} 
+    }
+    document.writeln('<br> yosepusArray: ' + yosepusArray) //+ '<> ' + givenArray)
+}
+
+function playYosepus(N, K) {
+	initArray(N); 
+	runYosepus(K)
+}
+
+playYosepus(7, 3) // 실행
+</script>
