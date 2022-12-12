@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>혼다 관리자</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css">
+  <link rel="stylesheet" href="/static/common/css/style.css">
+  <script src="/static/common/js/jquery-3.2.1.min.js"></script>
+
+  <!-- 달력관련 -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+
+</head>
+<body>
+<div id="wrap">
+  <header id="header">
+    <div class="headerTop">
+      <h1 class="logo"><a href="#">HONDA</a></h1>
+      <div class="headerLog">
+        <span class="log">HKO 홍길동(admin)님</span>
+        <button type="button" class="btnLogout">로그아웃</button>
+      </div>
+    </div>
+  </header>
+  <div id="container">
+    <div id="nav">
+      <div class="navSect mB20">
+        <h2 class="navTitle">혼다게시판</h2>
+        <ul class="gnb">
+          <li class="active"><a href="#">공지/뉴스</a></li>
+          <li><a href="#">블로그</a></li>
+          <li><a href="#">리얼앰버서더</a></li>
+          <li><a href="#">이벤트</a></li>
+        </ul>
+      </div>
+      <div class="navSect">
+        <h2 class="navTitle">커뮤니티게시판</h2>
+      </div>
+      <div class="navSect">
+        <h2 class="navTitle">인기글관리</h2>
+      </div>
+    </div>
+    <div id="content">
+      <div class="contents">
+        <h3 class="hty1"><span>게시판관리</span></h3>
+        <div class="section">
+          <div class="hty2Wp mgB0">
+            <h4 class="hty2">공지/뉴스</h4>
+          </div>
+          <form method="get">
+            <input type="hidden" name="page" th:value="${params.page}"/>
+          <div class="viewTbType">
+            <table>
+              <colgroup>
+                <col style="width:176px">
+                <col style="width:auto">
+              </colgroup>
+              <tbody>
+              <tr>
+                <th>제목</th>
+                <td class="tbInfo">
+                  <label for="scVal" class="hide">제목</label>
+                  <input type="text" id="scVal" name="scVal" class="input--text" th:value="${params.scVal}"/>
+                </td>
+              </tr>
+              <tr>
+                <th>등록일</th>
+                <td>
+                  <div class="period">
+                    <input type="date" class="input--date" id="scSdate" name="scSdate" th:value="${params.scSdate}"/> ~
+                    <input type="date" class="input--date" id="scEdate" name="scEdate" th:value="${params.scEdate}"/>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="btmCenter">
+            <button type="submit" class="btn--nor">검색</button>
+          </div>
+          </form>
+
+          <div class="hty2Wp mgT6">
+            <div class="d-flex align-baseline">
+              <h4 class="hty2">공지/뉴스 목록</h4>
+              <p class="mL10">제목 선택 시, 상세정보 확인 가능합니다.</p>
+            </div>
+            <div>
+              <span class="tx1 hc1">LIST:</span>
+              <a href="#" class="btn--bor">엑셀파일 다운로드</a>
+            </div>
+          </div>
+          <div class="garoScrollBx">
+            <div class="listTbType1 link-underline">
+              <table style="width:1740px">
+                <colgroup>
+                  <col style="width:67px">
+                  <col style="width:67px">
+                  <col style="width:67px">
+                  <col style="width:auto">
+                  <col style="width:10%">
+                  <col style="width:10%">
+                  <col style="width:10%">
+                </colgroup>
+                <thead>
+                <tr>
+                  <th><label class="aCheck"><input type="checkbox"><span class="aCheck__label noTxt">선택</span></label></th>
+                  <th>No</th>
+                  <th colspan="2">제목</th>
+                  <th>등록일</th>
+                  <th>등록자</th>
+                  <th>조회수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="data: ${response.list}">
+                  <td><label class="aCheck"><input type="checkbox"><span class="aCheck__label noTxt">선택</span></label></td>
+                  <td th:text="${(params.page)}"></td>
+                  <td>★</td>
+                  <td class="ellipsis agL">
+                    <a th:href="@{noticeDetail(page=1)}" th:text="${data.title}"></a>
+                  </td>
+                  <td th:text="${data.creDate}"></td>
+                  <td th:text="${data.createdBy}"></td>
+                  <td th:text="${data.readCnt}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(response.list)}">
+                  <td colspan="7">검색된 내용이 없습니다.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="pagination">
+            <div class="paging">
+            </div>
+          </div>
+          <div class="d-flex justify-flex-end mT20">
+            <div class="btn-wrap">
+              <button type="button" class="btn--bor">삭제</button>
+              <button type="button" class="btn--nor">등록</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer></footer>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    $("#scSdate").datepicker({
+      dateFormat: 'yy-mm-dd',
+    });
+    $("#scEdate").datepicker({
+      dateFormat: 'yy-mm-dd',
+    });
+  });
+</script>
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+    const params = [[ ${params} ]];
+
+    window.onload = () => {
+      findAllPost();
+    }
+
+    // 게시글 리스트 조회
+    function findAllPost() {
+      /*const list = [[ ${response.list} ]];
+      if ( !list.length ) {
+        document.getElementById('list').innerHTML = '<td colspan="7"><div className="no_data_msg">검색된 내용이 없습니다.</div></td>';
+        drawPage();
+      }*/
+
+      const pagination = [[ ${response.pagination} ]];
+      //const params = [[ ${params} ]];
+      let num = pagination.totalRecordCount - ((params.page - 1) * params.recordSize);
+
+      // drawList(list, num);
+      drawPage(pagination, params);
+    }
+
+
+    // 리스트 HTML draw
+    function drawList(list, num) {
+
+      let html = '';
+
+      list.forEach(row => {
+        html += `
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>${row.noticeYn === false ? num-- : '공지'}</td>
+                <td class="tl"><a href="/post/view.do?id=${row.id}">${row.title}</a></td>
+                <td>${row.writer}</td>
+                <td>${dayjs(row.createdDate).format('YYYY-MM-DD HH:mm')}</td>
+                <td>${row.viewCnt}</td>
+            </tr>
+        `;
+      })
+
+      document.getElementById('list').innerHTML = html;
+    }
+
+
+    // 페이지 HTML draw
+    function drawPage(pagination, params) {
+
+      if ( !pagination || !params ) {
+        document.querySelector('.paging').innerHTML = '';
+        throw new Error('필요한 파라미터가 없습니다.');
+      }
+
+      let html = '';
+
+      // 첫 페이지, 이전 페이지
+      if (pagination.existPrevPage) {
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(1);" class="paging__first"><span class="ally">처음</span></a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.startPage - 1});" class="paging__prev"><span class="ally">이전</span></a>
+        `;
+      }
+
+      // 페이지 번호
+      html += '<span class="paging__number">';
+      for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        html += (i !== params.page)
+                ? `<a href="javascript:void(0);" onclick="movePage(${i});">${i}</a>`
+                : `<a href="javascript:void(0);" onclick="movePage(${i});" class="on">${i}</a>`
+      }
+      html += '</span>';
+
+      // 다음 페이지, 마지막 페이지
+      if (pagination.existNextPage) {
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="paging__next"><span class="ally">다음</span></a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.totalPageCount});" class="paging__last"><span class="ally">마지막</span></a>
+        `;
+      }
+
+      document.querySelector('.paging').innerHTML = html;
+    }
+
+    // 페이지 이동
+    function movePage(page) {
+      const queryParams = {
+        page: (page) ? page : 1,
+        scVal: params.scVal,
+        scSdate: params.scSdate,
+        scEdate: params.scEdate
+      }
+      location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+    }
+  </script>
+</th:block>
+</body>
+</html>
