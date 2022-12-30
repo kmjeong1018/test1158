@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.newriver.hondakorea_bo.repository.TestMapper">
+
+    <select id="selectAllTestCount" parameterType="com.newriver.hondakorea_bo.model.TestDTO" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM TB_BBS_NOTICE tbn WITH(NOLOCK)
+        <where>
+            AND USE_YN = 'Y'
+            <if test="scVal != null and scVal != ''">
+                AND TITLE LIKE CONCAT('%', #{scVal}, '%')
+            </if>
+            <if test="scSdate != null and scSdate != ''">
+                AND CREATED_AT <![CDATA[ >= ]]> #{scSdate}
+            </if>
+            <if test="scEdate != null and scEdate != ''">
+                AND CREATED_AT <![CDATA[ <= ]]> #{scEdate}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllTest" parameterType="com.newriver.hondakorea_bo.model.TestDTO" resultType="TestDTO">
+        SELECT
+            NTC_SEQ,
+            TITLE,
+            CONTENTS,
+            READ_CNT,
+            VIEW_YN,
+            USE_YN,
+            CREATED_BY,
+            CREATED_AT,
+            CONVERT(VARCHAR, CREATED_AT, 102) AS CRE_DATE,
+            CREATED_IP,
+            UPDATED_BY,
+            UPDATED_AT,
+            CONVERT(VARCHAR, UPDATED_AT, 102) AS UPD_DATE,
+            UPDATED_IP
+        FROM TB_BBS_NOTICE tbn WITH(NOLOCK)
+        <where>
+            AND USE_YN = 'Y'
+            <if test="scVal != null and scVal != ''">
+                AND TITLE LIKE CONCAT('%', #{scVal}, '%')
+            </if>
+            <if test="scSdate != null and scSdate != ''">
+                AND CREATED_AT <![CDATA[ >= ]]> #{scSdate}
+            </if>
+            <if test="scEdate != null and scEdate != ''">
+                AND CREATED_AT <![CDATA[ <= ]]> #{scEdate}
+            </if>
+        </where>
+        ORDER BY CREATED_AT DESC
+        OFFSET #{pagination.limitStart} ROWS
+        FETCH NEXT #{recordSize} ROWS ONLY
+    </select>
+
+</mapper>
