@@ -17,7 +17,8 @@ $end   = empty($_GET['end'])   ? 0 : trim($_GET['end']);
 function date_check($str) { // 날자 포멧 체크
   // 2022/11/01 (13:34)
   
-  if ($str == 'NULL') return false;
+  //if ($str == 'NULL') return true;
+  if ($str == '') return false;
   else {
     $str = str_replace("'", "", $str);
     preg_match('/^(\d{4})\/(\d{2})\/(\d{2}) \((\d{2}):(\d{2})\)$/', $str, $match);
@@ -33,8 +34,15 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
       $email     = trim($data[3]);
       $smsDate   = trim($data[4]);
       $emailDate = trim($data[6]);
-      $smsDate   = empty($smsDate) ? 'NULL' : "'{$smsDate}'";
-      $emailDate = empty($emailDate) ? 'NULL' : "'{$emailDate}'";
+      
+      $smsDate   = empty($smsDate) ? '' : "'{$smsDate}'";
+      $emailDate = empty($emailDate) ? '' : "'{$emailDate}'";
+
+      // $smsDate   = empty($smsDate) ? 'NULL' : "'{$smsDate}'";
+      // $emailDate = empty($emailDate) ? 'NULL' : "'{$emailDate}'";
+
+      $smsDateStr = empty($smsDate) ? '' : " SMS_YN_DATE = TO_DATE({$smsDate},'YYYY-MM-DD HH24:mi:ss')";
+      $emailDateStr = empty($emailDate) ? '' : " EMAIL_YN_DATE = TO_DATE({$emailDate},'YYYY-MM-DD HH24:mi:ss')";
       
       if($row < $start) {
         $row++;
@@ -45,7 +53,7 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
       } else if($row == 1) { // 엑셀 헤더 무시
         $row++;
 
-      } else if(date_check($emailDate) == false || date_check($smsDate) == false) { // 하나라도 null 이면 스킵
+      } else if(date_check($emailDate) == false && date_check($smsDate) == false) { // 하나라도 null 이면 스킵
         $row++;
         $char_cnt++;
         $char_sql .= "\n{$email} \t {$userId} \t {$smsDate} \t {$emailDate}";
@@ -58,7 +66,15 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
       } else if(!empty($userId)) { 
         $row++;
         $cnt++;
-        $updateSql = "UPDATE TCUSTOMER_20221213 SET SMS_YN_DATE = TO_DATE({$smsDate},'YYYY-MM-DD HH24:mi:ss'), EMAIL_YN_DATE = TO_DATE({$emailDate},'YYYY-MM-DD HH24:mi:ss') WHERE MEM_ID = '{$userId}';";
+        $upSql = $smsDateStr;
+
+        if ($upSql) {
+          $upSql .= ", " . $emailDateStr;
+        } else {
+          $upSql .= $emailDateStr;
+        }
+
+        if ($upSql) $updateSql = "UPDATE TCUSTOMER_20221213 SET $upSql WHERE MEM_ID = '{$userId}';";
         echo "\n". $updateSql;
 
       }
@@ -81,9 +97,9 @@ echo "
   normal $cnt rows / empty $empty_cnt rows / charactor $char_cnt rows
 </pre>";
 
-//echo "<br><br><br>  odd $odd_cnt rows <pre>". $odd_sql."</pre>";
-echo "<br>  empty $empty_cnt rows <pre>". $empty_sql."</pre>";
-echo "<br>  charactor $char_cnt rows <pre>". $char_sql."</pre>";
+
+//echo "<br>  empty $empty_cnt rows <pre>". $empty_sql."</pre>";
+//echo "<br>  charactor $char_cnt rows <pre>". $char_sql."</pre>";
 
 
 // $tns = " 
