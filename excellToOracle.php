@@ -26,7 +26,7 @@ function date_check($str) { // 날자 포멧 체크
   }
 }
 
-if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree202211.csv", "r")) !== FALSE) {
+if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree202212.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 150, ",")) !== FALSE) {
 
       // 변수정리
@@ -68,13 +68,13 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
         $cnt++;
         $upSql = $smsDateStr;
 
-        if ($upSql) {
+        if ($upSql && $emailDateStr) {
           $upSql .= ", " . $emailDateStr;
-        } else {
+        } else if ($emailDateStr) {
           $upSql .= $emailDateStr;
         }
 
-        if ($upSql) $updateSql = "UPDATE TCUSTOMER_20221213 SET $upSql WHERE MEM_ID = '{$userId}';";
+        if ($upSql) $updateSql = "UPDATE TCUSTOMER SET $upSql WHERE MEM_ID = '{$userId}';";
         echo "\n". $updateSql;
 
       }
@@ -85,7 +85,7 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
 }
 ?>
 </pre>
-
+/* 
 <form name="frm" action="excellToOracle.php" method='get'> 
   <input type="text" name="start"  placeholder="start row number" value="<?=$start?>" />  ~   <input type="text" name="end"  placeholder="end row number" value="<?=$end?>" />
   <input type="submit" value="submit" onclick="this.form.submit();" />
@@ -95,11 +95,11 @@ if (!empty($start) && !empty($end) && ($handle = fopen("MakeshopMemberAgree20221
 echo "
 <pre>
   normal $cnt rows / empty $empty_cnt rows / charactor $char_cnt rows
-</pre>";
+</pre>  */";
 
 
-//echo "<br>  empty $empty_cnt rows <pre>". $empty_sql."</pre>";
-//echo "<br>  charactor $char_cnt rows <pre>". $char_sql."</pre>";
+// echo "<br>  empty $empty_cnt rows <pre>". $empty_sql."</pre>";
+// echo "<br>  charactor $char_cnt rows <pre>". $char_sql."</pre>";
 
 
 // $tns = " 
