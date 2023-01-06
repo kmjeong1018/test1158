@@ -33,7 +33,6 @@ function isInArray(_array, num) {
 const array_return = initRandomArray(10)
 const array_positive = [];
 let num_final = 1;
-let num_pre = 0;
 let num_after = 0;
 
 // 양의 정수 배열
@@ -53,15 +52,9 @@ if (isInArray(array_positive, 1) == false) {
   for (let index = 0; index < array_positive.length; index++) {
 
     const element = array_positive[index];
-    num_pre = element - 1;
     num_after = element + 1;
 
-
-    if (isInArray(array_positive, num_pre) == false && num_pre != 0) {
-      num_final = num_pre;
-      break;
-
-    } else if (isInArray(array_positive, num_after) == false) {
+    if (isInArray(array_positive, num_after) == false) {
       num_final = num_after;
       break;
 
