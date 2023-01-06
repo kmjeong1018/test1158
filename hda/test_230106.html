@@ -1,92 +1,75 @@
 <!DOCTYPE html>
 <html>
 <body>
-
- <p id="demo"></p>
-
- <script>
-let num = 15;
-let text = num.toString();
-
- function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
+<p id="demo"></p>
+<script>
+function getRandomArbitrary(min, max) {
+ return Math.random() * (max - min) + min;
 }
+function initRandomArray (len_array) {
 
- function initRandomArray(len_array) {
+  const array_return = [];
 
-     const array_return = [];
-    while (array_return.length != len_array) {
-
-     const num_random = parseInt(getRandomArbitrary(-100000000, 100000000));
+  while (array_return.length != len_array) {
+    const num_random = parseInt(getRandomArbitrary(-100000000, 100000000));
     array_return.push(num_random)
+    array_return.sort((a, b) => a - b);
+    //console.log(array_return);
+  }
 
-     array_return.sort((a, b) => a - b);
-    console.log(array_return);
-    }
-
-     return array_return;
-
- }
-
- function isInArray(_array, num) {
-
-    
-    for (let index = 0; index < array_return.length; index++) {
-        const element = _array[index];
-
-         if (element == num) return true;
-       
-    }
-    return false;
+  return array_return;
 }
 
- const array_return = initRandomArray(11)
+function isInArray(_array, num) {
+
+  for (let index = 0; index < array_return.length; index++) {
+    const element = _array[index];
+    if (element == num) return true;
+  }
+
+  return false;
+}
+
+// 변수 정리
+const array_return = initRandomArray(11)
+const array_positive = [];
 let num_final = 1;
 let num_pre = 0;
 let num_after = 0;
-const array_positive = [];
 
- for (let index = 0; index < array_return.length; index++) {
-    const element = array_return[index];
-
-     if (element > 0) array_positive.push(element);
-   
+// 양의 정수 배열
+for (let index = 0; index < array_return.length; index++) {
+  const element = array_return[index];
+  if (element > 0) array_positive.push(element);
+  
 }
 
- console.log(array_positive);
+//console.log(array_positive);
 for (let index = 0; index < array_positive.length; index++) {
 
-     const element = array_positive[index];
+  const element = array_positive[index];
+  num_pre = element - 1;
+  num_after = element + 1;
 
-     num_pre = element - 1;
-    num_after = element + 1;
+  if (element == num_final) {
+    num_final++;
 
-     if (element == num_final) {
+  } else if (isInArray(array_positive, num_pre) == false) {
+    num_final = num_pre;
+    break;
 
-         num_final++;
+  } else if (isInArray(array_positive, num_after) == false) {
+    num_final = num_after;
+    break;
 
-    } else if (isInArray(array_positive, num_pre) == false) {
+  } else {
+    num_final = num_after + 1;
 
-         num_final = num_pre;
-        break;
-
-     } else if (isInArray(array_positive, num_after) == false) {
-
-         num_final = num_after;
-        break;
-
-     } else {
-        num_final = num_after + 1;
-
-     }
-   
+  }
+  
 }
 
- document.getElementById("demo").innerHTML = "Array : " + array_return + "<br >smallest positive integer : " + num_final;
-
- </script>
-
- </body>
+document.getElementById("demo").innerHTML = "Array : [" + array_return + "]<br >smallest positive integer : " + num_final;
+</script>
+</body>
 </html>
-
- 
