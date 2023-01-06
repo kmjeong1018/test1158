@@ -43,29 +43,35 @@ for (let index = 0; index < array_return.length; index++) {
   
 }
 
-//console.log(array_positive);
-for (let index = 0; index < array_positive.length; index++) {
 
-  const element = array_positive[index];
-  num_pre = element - 1;
-  num_after = element + 1;
-
+if (isInArray(array_positive, 1) == false) {
+  num_final = 1;
   
-  if (element == num_final) {
-    num_final++;
+} else {
 
-  } else if (isInArray(array_positive, num_pre) == false) {
-    num_final = num_pre;
-    break;
+  //console.log(array_positive);
+  for (let index = 0; index < array_positive.length; index++) {
 
-  } else if (isInArray(array_positive, num_after) == false) {
-    num_final = num_after;
-    break;
+    const element = array_positive[index];
+    num_pre = element - 1;
+    num_after = element + 1;
 
-  } else {
-    num_final = num_after + 1;
+
+    if (isInArray(array_positive, num_pre) == false && num_pre != 0) {
+      num_final = num_pre;
+      break;
+
+    } else if (isInArray(array_positive, num_after) == false) {
+      num_final = num_after;
+      break;
+
+    } else {
+      num_final = num_after + 1;
+
+    }
 
   }
+
   
 }
 
