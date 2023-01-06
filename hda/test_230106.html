@@ -50,12 +50,8 @@ for (let index = 0; index < array_positive.length; index++) {
   num_pre = element - 1;
   num_after = element + 1;
 
-
-  if (isInArray(array_positive, 1) == false) {
-    num_final = 1;
-    break;
-    
-  } else if (element == num_final) {
+  
+  if (element == num_final) {
     num_final++;
 
   } else if (isInArray(array_positive, num_pre) == false) {
