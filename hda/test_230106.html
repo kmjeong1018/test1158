@@ -13,11 +13,10 @@ function initRandomArray (len_array) {
   while (array_return.length != len_array) {
     const num_random = parseInt(getRandomArbitrary(-100000000, 100000000));
     array_return.push(num_random)
-    array_return.sort((a, b) => a - b);
     //console.log(array_return);
   }
 
-  return array_return;
+  return  array_return.sort((a, b) => a - b);
 }
 
 function isInArray(_array, num) {
@@ -31,7 +30,7 @@ function isInArray(_array, num) {
 }
 
 // 변수 정리
-const array_return = initRandomArray(100)
+const array_return = initRandomArray(10)
 const array_positive = [];
 let num_final = 1;
 let num_pre = 0;
@@ -51,7 +50,12 @@ for (let index = 0; index < array_positive.length; index++) {
   num_pre = element - 1;
   num_after = element + 1;
 
-  if (element == num_final) {
+
+  if (isInArray(array_positive, 1) == false) {
+    num_final = 1;
+    break;
+    
+  } else if (element == num_final) {
     num_final++;
 
   } else if (isInArray(array_positive, num_pre) == false) {
